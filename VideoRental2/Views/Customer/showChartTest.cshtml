@@ -1,0 +1,44 @@
+﻿@using VideoRental2.ViewModels
+@using System;
+@model VideoRental2.ViewModels.ShowChartViewModel
+@{
+    ViewBag.Title = "Test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>showChart</h2>
+
+
+@using (Html.BeginForm("TestExecutable", "Customer"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.yVal)
+        @Html.DropDownListFor(model => model.yVal, new SelectList(Model.dataSets, "id", "dataName"), "Select Variable", new { @class = "form-control" })
+    </div>
+    //@Html.HiddenFor(m => m.dataSets)//, new { @value = Model.dataSets }
+
+    for (int i = 0; i < Model.dataSets.Count(); i++)
+    {
+        for (int j = 0; j < Model.dataSets[i].mag.Count(); j++)
+        {
+            @Html.HiddenFor(m => m.dataSets[i].mag[j])
+        }
+        @Html.HiddenFor(m => m.dataSets[i].dataName)
+        @Html.HiddenFor(m => m.dataSets[i].id)
+        @Html.HiddenFor(m => m.dataSets[i].type)
+    }
+
+    @Html.HiddenFor(m => m.xVal)//, new { @value = Model.dataSets }
+    @Html.HiddenFor(m => m.sessionId)
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+@{
+
+    <img src="~/Content/myChart@(Model.sessionId).jpeg" alt="Alternate Text" />
+}
+<h1 onclick="changeText(this)">Click on this text!</h1>
+
+<script type="text/javascript">
+
+</script>

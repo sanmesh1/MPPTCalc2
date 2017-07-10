@@ -1,0 +1,9 @@
+Sanmeshkumar Udhayakumar
+Vi 1 0 ac 1k
+R 1 2 10k
+C1 1 2 1n
+C2 2 3 .22u
+C3 3 0 .15u
+.ac dec 30 10 100k
+.probe
+.end

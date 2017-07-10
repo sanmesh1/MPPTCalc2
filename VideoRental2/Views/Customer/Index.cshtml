@@ -1,0 +1,65 @@
+﻿@model VideoRental2.ViewModels.ViewPlotsViewModel
+@{
+    ViewBag.Title = "CustomerView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CustomerView</h2>
+
+@using (Ajax.BeginForm("AjaxMethod", "Customer",
+                                            new AjaxOptions
+                                            {
+                                                OnSuccess = "OnSuccess",
+                                                OnFailure = "OnFailure",
+                                                LoadingElementId = "progress"
+                                            }))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.xData)
+        @Html.DropDownListFor(model => model.xData, new SelectList(Model.dataSets, "id", "dataName"), "Select Variable", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.yData)
+        @Html.DropDownListFor(model => model.yData, new SelectList(Model.dataSets, "id", "dataName"), "Select Variable", new { @class = "form-control" })
+    </div>
+    <td><input type="submit" value="Submit" /></td>
+}
+<div id="progress" class="modal">
+    <div class="center">
+        <img src="~/images/loader4.gif" />
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+        function OnSuccess(response) {
+            var mySeries = [];
+            for (var i = 0; i < response.lengthArray; i++)
+            {
+                mySeries.push(response.dataSets[response.yData].mag[i]);
+            }
+            var mySeries2 = [1,2,3];
+            var myChart = Highcharts.chart('container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Fruit Consumption'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Fruit eaten'
+                    }
+                },
+                series: [{
+                    name: 'Jane',
+                    data: mySeries
+                }]
+            });
+        }
+        function OnFailure(response) {
+            alert("Error occured.");
+        }
+</script>
+<div id="container" style="width:100%; height:400px;"></div>

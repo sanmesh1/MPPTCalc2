@@ -1,0 +1,33 @@
+﻿
+@model List<VideoRental2.Models.Movie>
+@{
+    ViewBag.Title = "MovieView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>MovieView</h2>
+<div class="btn btn-default"> @Html.ActionLink("New Movie", "New", "Movie") </div>
+@if (Model.Count() == 0)
+{
+    <p>"There are no movies"</p>
+}
+else
+{
+    <table class="table table-bordered table-hover"> 
+        <thead>
+            <tr>
+                <th>Movies</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                @*@<li>@Html.ActionLink(customer.name, Index, Home, new { id = customer.id }, null)</li>*@
+                <tr>
+                    <td>@Html.ActionLink(movie.name, "Edit", "Movie", new { id = movie.id }, null)</td>
+                    <td>@movie.Genre.name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

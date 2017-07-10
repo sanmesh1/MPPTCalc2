@@ -1,0 +1,37 @@
+﻿@model VideoRental2.ViewModels.NewCustomerViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New Customer</h2>
+
+@using (Html.BeginForm("Create", "Customer"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.name)
+        @Html.TextBoxFor(m => m.Customer.name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.birthday)
+        @Html.TextBoxFor(m => m.Customer.birthday, "{0:d MMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.birthday)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.MembershipTypeId)
+        @Html.DropDownListFor(m => m.Customer.MembershipTypeId, new SelectList(Model.MembershipType, "id", "name"), "Select Membership Type", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.MembershipTypeId)
+    </div>
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.Customer.isSubscribedToNewsLetter) Subscribe to NewsLetter
+        </label>
+    </div>
+    @Html.HiddenFor(m => m.Customer.id)
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+}
+

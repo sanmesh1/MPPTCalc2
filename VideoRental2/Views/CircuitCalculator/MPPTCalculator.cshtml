@@ -1,0 +1,154 @@
+﻿@{
+    ViewBag.Title = "ViewPlots";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Plot Data</h2>
+
+@model VideoRental2.ViewModels.MPPTCalculatorViewModel
+
+
+@*ajax form to take in circuit requirements and go to controller to make netlist based off of this*@
+@using (Ajax.BeginForm("ActOnCircuitParams", "CircuitCalculator",
+                                                                new AjaxOptions
+                                                                {
+                                                                    OnSuccess = "CircParamsOnSuccess",
+                                                                    OnFailure = "CircParamsOnFailure",
+                                                                    LoadingElementId = "progress"
+                                                                }))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.vinTest)
+        @Html.TextBoxFor(m => m.buckBoostParams.vinTest, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.voutTest)
+        @Html.TextBoxFor(m => m.buckBoostParams.voutTest, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.freq)
+        @Html.TextBoxFor(m => m.buckBoostParams.freq, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.iLoadAvgMax)
+        @Html.TextBoxFor(m => m.buckBoostParams.iLoadAvgMax, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.iRipplePerc)%
+        @Html.TextBoxFor(m => m.buckBoostParams.iRipplePerc, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.vRipplePerc)%
+        @Html.TextBoxFor(m => m.buckBoostParams.vRipplePerc, new { @class = "form-control" })
+    </div>
+
+    //Maybe actual input
+    @*
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.freq)
+        @Html.TextBoxFor(m => m.buckBoostParams.freq, new { @class = "form-control" })%
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.vinMin)
+        @Html.TextBoxFor(m => m.buckBoostParams.vinMin, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.vinMax)
+        @Html.TextBoxFor(m => m.buckBoostParams.vinMax, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.voutMin)
+        @Html.TextBoxFor(m => m.buckBoostParams.voutMin, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.voutMax)
+        @Html.TextBoxFor(m => m.buckBoostParams.voutMax, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.iLoadAvgMax)
+        @Html.TextBoxFor(m => m.buckBoostParams.iLoadAvgMax, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.iRipplePerc)
+        @Html.TextBoxFor(m => m.buckBoostParams.iRipplePerc, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.buckBoostParams.vRipplePerc)
+        @Html.TextBoxFor(m => m.buckBoostParams.vRipplePerc, new { @class = "form-control" })%
+    </div>
+    *@
+    //submit button
+    <td><input type="submit" value="Submit" /></td>
+}
+
+@*Ajax form that updates chart displayed*@
+@using (Ajax.BeginForm("GetJsonPlotData", "CircuitCalculator",
+    new AjaxOptions
+    {
+        OnSuccess = "PlotsOnSuccess",
+        OnFailure = "PlotsOnFailure",
+        LoadingElementId = "progress"
+    }))
+{
+    //drop downs to choose x-axis and y-axis data
+    <div class="form-group">
+        @Html.LabelFor(m => m.xData)
+        @Html.DropDownListFor(model => model.xData, new SelectList(Model.dataSets, "id", "dataName"), "Select Variable", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.yData)
+        @Html.DropDownListFor(model => model.yData, new SelectList(Model.dataSets, "id", "dataName"), "Select Variable", new { @class = "form-control" })
+    </div>
+    
+    //submit button
+    <td><input type="submit" value="Submit" /></td>
+}
+@*Loading action*@
+<div id="progress" class="modal">
+    <div class="center">
+        <img src="~/Content/Gifs/loading.gif" />
+    </div>
+</div>
+
+@*necessary scripts for Highcharts*@
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script type="text/javascript">
+        function PlotsOnSuccess(response) {
+
+            //create 2d array of x-y data points
+            var mySeries = new Array();
+            for (var i = 0; i < response.lengthArray; i++) {
+                mySeries.push([]);
+                mySeries[i].push(response.dataSets[response.xData].mag[i]);
+                mySeries[i].push(response.dataSets[response.yData].mag[i]);
+            }
+
+            var myChart = Highcharts.chart('container', {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'Circuit Output'
+                },
+                xAxis: {
+                    title: {
+                        text: response.dataSets[response.xData].dataName
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: response.dataSets[response.yData].dataName
+                    }
+                },
+                series: [{
+                    data: mySeries
+                }]
+            });
+        }
+        function PlotsOnFailure(response) {
+            alert("Error occured.");
+        }
+</script>
+<div id="container" style="width:100%; height:400px;"></div>

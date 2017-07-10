@@ -1,0 +1,21 @@
+﻿@model VideoRental2.ViewModels.RandomMovieViewModel
+@{
+    ViewBag.Title = "Random";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.randomMovie.name</h2>
+
+@if (Model.customers.Count() == 0)
+{
+    <p>"No on has rented this movie"</p>
+}
+else
+{
+    <ul>
+        @foreach (var customer in Model.customers)
+        {
+            <li>@customer.name</li>
+        }
+    </ul>
+}

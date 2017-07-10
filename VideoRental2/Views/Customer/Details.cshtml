@@ -1,0 +1,12 @@
+﻿@model VideoRental2.Models.Customer
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.name</h2>
+<ul>
+    <li>@Model.MembershipType.name</li>
+    <li>@Model.birthday</li>
+</ul>
+

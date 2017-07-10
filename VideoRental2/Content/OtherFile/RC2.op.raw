@@ -1,0 +1,20 @@
+Title: * C:\Users\sanme_000\Documents\Visual Studio 2015\Projects\VideoRental2\VideoRental2\Content\OtherFile\RC2.asc
+Date: Thu Jul 06 19:50:37 2017
+Plotname: Operating Point
+Flags: real
+No. Variables: 5
+No. Points:            1
+Offset:   0.0000000000000000e+000
+Command: Linear Technology Corporation LTspice IV
+Variables:
+	0	V(n001)	voltage
+	1	V(n002)	voltage
+	2	I(C1)	device_current
+	3	I(R1)	device_current
+	4	I(V1)	device_current
+Values:
+0		5.000000000000000e+000
+	0.000000000000000e+000
+	0.000000000000000e+000
+	1.000000000000000e+000
+	-1.000000000000000e+000

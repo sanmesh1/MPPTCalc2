@@ -1,0 +1,8 @@
+* C:\Users\sanme_000\Draft1.asc
+V1 N001 0 5
+C1 N002 0 1m
+R1 N001 N002 500
+.tran 2
+.ic v(n002) = 0
+.backanno
+.end
